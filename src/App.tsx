@@ -94,26 +94,28 @@ function FloatingChatWindow({
     <div 
       className={cn(
         "fixed bottom-4 right-4 bg-gray-900 rounded-lg overflow-hidden flex flex-col shadow-2xl border border-gray-800 transition-all duration-300 z-40",
-        isExpanded ? "w-96 h-[520px]" : "w-80 h-[420px]"
+        isExpanded 
+          ? "w-[90vw] sm:w-96 h-[70vh] sm:h-[520px] max-w-[400px]" 
+          : "w-[80vw] sm:w-80 h-[50vh] sm:h-[420px] max-w-[320px]"
       )}
     >
       <div className="p-2 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
         <div className="flex items-center">
-          <MessageSquare size={18} className="text-blue-400 mr-2" />
-          <span className="font-medium">Chat</span>
+          <MessageSquare size={16} className="text-blue-400 mr-1.5 sm:mr-2" />
+          <span className="font-medium text-sm sm:text-base">Chat</span>
         </div>
         <div className="flex items-center gap-1">
           <button 
             onClick={onToggleExpand}
             className="p-1 hover:bg-gray-700 rounded-full"
           >
-            {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            {isExpanded ? <Minimize2 size={14} className="sm:w-4 sm:h-4" /> : <Maximize2 size={14} className="sm:w-4 sm:h-4" />}
           </button>
           <button 
             onClick={onClose}
             className="p-1 hover:bg-gray-700 rounded-full"
           >
-            <X size={16} />
+            <X size={14} className="sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

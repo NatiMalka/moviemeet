@@ -134,47 +134,47 @@ export function Chat({ messages: initialMessages, onSendMessage }: ChatProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
         {messages.map((message) => (
           <div key={message.id} className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-medium ${message.user === 'System' ? 'text-blue-400' : 'text-gray-400'}`}>
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+              <span className={`text-xs sm:text-sm font-medium ${message.user === 'System' ? 'text-blue-400' : 'text-gray-400'}`}>
                 {message.user}
               </span>
               <span className="text-xs text-gray-500">
-                {message.timestamp.toLocaleTimeString()}
+                {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
               </span>
             </div>
-            <p className="text-white">{message.text}</p>
+            <p className="text-white text-sm sm:text-base break-words">{message.text}</p>
           </div>
         ))}
         {/* Empty div at the end for auto-scrolling */}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="p-3 pt-2 pb-4 border-t border-gray-800">
-        <div className="flex items-center gap-2 bg-gray-800 rounded-full p-1 pl-3 pr-1">
+      <form onSubmit={handleSubmit} className="p-2 sm:p-3 pt-2 pb-3 border-t border-gray-800">
+        <div className="flex items-center gap-1 sm:gap-2 bg-gray-800 rounded-full p-1 pl-2 sm:pl-3 pr-1">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 bg-transparent text-white py-2 focus:outline-none"
+            className="flex-1 bg-transparent text-white py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none"
           />
           
           <button
             type="button"
-            className="p-2 text-gray-400 hover:text-blue-400 transition"
+            className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-400 transition"
           >
-            <Smile size={18} />
+            <Smile size={16} className="sm:h-[18px] sm:w-[18px]" />
           </button>
           
           <button
             type="submit"
-            className={`p-2 rounded-full ${newMessage.trim() ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-700 text-gray-400'} transition`}
+            className={`p-1.5 sm:p-2 rounded-full ${newMessage.trim() ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-700 text-gray-400'} transition`}
             disabled={!newMessage.trim()}
           >
-            <Send size={18} />
+            <Send size={16} className="sm:h-[18px] sm:w-[18px]" />
           </button>
         </div>
       </form>

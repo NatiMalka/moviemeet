@@ -86,10 +86,12 @@ function CustomVideoGrid() {
 
   return (
     <div className="w-full h-full">
-      <div className={`grid ${gridClass} gap-3 p-4 h-full`}>
+      <div className={`grid ${gridClass} gap-2 sm:gap-3 p-2 sm:p-4 h-full`}>
         {tracks.map((track) => (
           <div key={track.participant.identity + (track.publication?.trackSid || 'placeholder')} 
-               className="w-full h-full bg-gray-800 rounded-lg overflow-hidden flex items-center justify-center shadow-lg">
+               className="w-full h-full bg-gray-800 rounded-lg overflow-hidden flex items-center justify-center shadow-lg"
+               style={{ minHeight: '120px' }}
+          >
             <ParticipantTile 
               participant={track.participant}
               source={track.source}
@@ -136,13 +138,13 @@ function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, i
   // More compact version of controls for integrated view
   return (
     <div className="flex justify-between items-center w-full px-2">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2">
         <button 
           onClick={toggleCamera}
-          className={`p-2 ${isCameraEnabled ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'} rounded-full text-white transition-colors`}
+          className={`p-1.5 sm:p-2 ${isCameraEnabled ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'} rounded-full text-white transition-colors`}
           title={isCameraEnabled ? "Turn off camera" : "Turn on camera"}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
             <circle cx="12" cy="10" r="3"></circle>
           </svg>
@@ -150,10 +152,10 @@ function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, i
         
         <button 
           onClick={toggleMicrophone}
-          className={`p-2 ${isMicEnabled ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'} rounded-full text-white transition-colors`}
+          className={`p-1.5 sm:p-2 ${isMicEnabled ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'} rounded-full text-white transition-colors`}
           title={isMicEnabled ? "Mute microphone" : "Unmute microphone"}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4">
             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
             <line x1="12" y1="19" x2="12" y2="23"></line>
@@ -162,9 +164,9 @@ function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, i
         </button>
       </div>
       
-      <div className="flex items-center gap-2">
-        <div className="bg-gray-800 px-2 py-1 rounded-full flex items-center text-gray-300 text-xs">
-          <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <div className="bg-gray-800 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full flex items-center text-gray-300 text-xs">
+          <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
           </svg>
           {participants.length}
@@ -172,10 +174,10 @@ function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, i
         
         <button 
           onClick={toggleScreenShare}
-          className={`p-2 ${isScreenShareEnabled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-800 hover:bg-gray-700'} rounded-full text-white transition-colors`}
+          className={`p-1.5 sm:p-2 ${isScreenShareEnabled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-800 hover:bg-gray-700'} rounded-full text-white transition-colors`}
           title={isScreenShareEnabled ? "Stop screen sharing" : "Share screen"}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4">
             <path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3"></path>
             <path d="M8 21h8"></path>
             <path d="M12 17v4"></path>
@@ -187,10 +189,10 @@ function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, i
         {/* Resize button */}
         <button 
           onClick={onToggleSize}
-          className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full text-white transition-colors"
+          className="p-1.5 sm:p-2 bg-gray-800 hover:bg-gray-700 rounded-full text-white transition-colors"
           title={isLarge ? "Shrink camera window" : "Expand camera window"}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4">
             {isLarge ? (
               // Minimize icon
               <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
@@ -365,13 +367,13 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
   if (step === 'configure') {
     return (
       <div className="h-full flex flex-col">
-        <div className="bg-gray-900/90 backdrop-blur-sm p-4 border-b border-gray-800 mb-4 flex justify-between items-center">
+        <div className="bg-gray-900/90 backdrop-blur-sm p-3 sm:p-4 border-b border-gray-800 mb-2 sm:mb-4 flex justify-between items-center">
           <div>
             <button 
               onClick={() => setStep('select')}
               className="text-gray-400 hover:text-white transition-colors flex items-center"
             >
-              <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
               </svg>
               Back
@@ -379,11 +381,11 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
           </div>
           
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-white">Configure Your Devices</h2>
-            <p className="text-gray-400 text-sm">Set up your camera and microphone before joining</p>
+            <h2 className="text-lg sm:text-xl font-semibold text-white">Configure Devices</h2>
+            <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Set up your camera and microphone</p>
           </div>
           
-          <div className="w-16"></div> {/* Empty div for flex alignment */}
+          <div className="w-12 sm:w-16"></div> {/* Empty div for flex alignment */}
         </div>
         
         <div className="flex-1">
@@ -409,28 +411,28 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
           />
         </div>
         
-        <div className="bg-gray-900/90 backdrop-blur-sm py-3 px-4 flex justify-between items-center border-t border-gray-800">
-          <div className="text-sm text-gray-400">
+        <div className="bg-gray-900/90 backdrop-blur-sm py-2 sm:py-3 px-3 sm:px-4 flex justify-between items-center border-t border-gray-800">
+          <div className="text-xs sm:text-sm text-gray-400">
             {movieTitle && (
               <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
                 </svg>
-                Watching: <span className="text-white ml-1">{movieTitle}</span>
+                <span className="hidden xs:inline">Watching:</span> <span className="text-white ml-1 truncate max-w-[120px] sm:max-w-none">{movieTitle}</span>
               </span>
             )}
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className={mediaSettings.videoEnabled ? "text-green-400 text-sm" : "text-red-400 text-sm"}>
-              <span className="inline-block w-2 h-2 rounded-full mr-1 align-middle" 
+          <div className="flex items-center gap-2 sm:gap-4">
+            <span className={mediaSettings.videoEnabled ? "text-green-400 text-xs sm:text-sm" : "text-red-400 text-xs sm:text-sm"}>
+              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 align-middle" 
                     style={{backgroundColor: mediaSettings.videoEnabled ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)'}}></span>
               Camera
             </span>
-            <span className={mediaSettings.audioEnabled ? "text-green-400 text-sm" : "text-red-400 text-sm"}>
-              <span className="inline-block w-2 h-2 rounded-full mr-1 align-middle"
+            <span className={mediaSettings.audioEnabled ? "text-green-400 text-xs sm:text-sm" : "text-red-400 text-xs sm:text-sm"}>
+              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mr-1 align-middle"
                     style={{backgroundColor: mediaSettings.audioEnabled ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)'}}></span>
-              Microphone
+              Mic
             </span>
           </div>
         </div>
@@ -445,15 +447,15 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
       <style>{customStyles}</style>
       
       {/* Fixed position video chat when in large mode */}
-      <div className={isLargeSize ? "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" : ""}>
+      <div className={isLargeSize ? "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-2 sm:p-4" : ""}>
         <div className={isLargeSize ? "w-full max-w-5xl h-[85vh] bg-gray-900 rounded-lg overflow-hidden shadow-2xl relative" : "h-full relative"}>
           {isLargeSize && (
-            <div className="absolute top-0 right-0 p-2 z-20">
+            <div className="absolute top-0 right-0 p-1 sm:p-2 z-20">
               <button 
                 onClick={toggleSize}
-                className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full"
+                className="bg-gray-800/80 hover:bg-gray-700 text-white p-1.5 sm:p-2 rounded-full"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
               </button>
