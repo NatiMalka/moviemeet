@@ -28,10 +28,13 @@ interface Movie {
 
 export function AdminMovieManager() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [showThumbnailPreview, setShowThumbnailPreview] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   
   const [formData, setFormData] = useState<MovieFormData>({
     title: '',
@@ -67,8 +70,10 @@ export function AdminMovieManager() {
 
   // Load movies on mount
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    if (authenticated) {
+      fetchMovies();
+    }
+  }, [authenticated]);
 
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -152,9 +157,87 @@ export function AdminMovieManager() {
     }
   };
 
+  // Handle authentication
+  const handleAuthentication = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Simulate a brief delay for authentication
+    setTimeout(() => {
+      if (password === 'admin123') {
+        setAuthenticated(true);
+        setError(null);
+      } else {
+        setError('Invalid password');
+      }
+      setLoading(false);
+    }, 500);
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // If not authenticated, show login form
+  if (!authenticated) {
+    return (
+      <div className="admin-login p-4 max-w-md mx-auto mt-20">
+        <div className="bg-gray-900 p-6 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold mb-6 text-center">Admin Login</h1>
+          
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 p-4 rounded-lg mb-4">
+              <p className="text-red-400">{error}</p>
+            </div>
+          )}
+          
+          <form onSubmit={handleAuthentication} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter admin password"
+                  required
+                />
+                <button 
+                  type="button" 
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-400 hover:text-white"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Hint: admin123</p>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition duration-200"
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Login'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-movie-manager p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Movie Library Manager</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Movie Library Manager</h1>
+        <button
+          onClick={() => setAuthenticated(false)}
+          className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm"
+        >
+          Logout
+        </button>
+      </div>
       
       {/* Status messages */}
       {error && (
@@ -250,33 +333,6 @@ export function AdminMovieManager() {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Year</label>
-                <input
-                  type="number"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleInputChange}
-                  min="1900"
-                  max="2099"
-                  className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Duration</label>
-                <input
-                  type="text"
-                  name="duration"
-                  value={formData.duration}
-                  onChange={handleInputChange}
-                  placeholder="1h 30m"
-                  className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-            
             <div>
               <label className="block text-sm font-medium mb-1">Genre</label>
               <select
@@ -285,110 +341,101 @@ export function AdminMovieManager() {
                 onChange={handleInputChange}
                 className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Select Genre</option>
+                <option value="">-- Select Genre --</option>
                 <option value="Action">Action</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Drama">Drama</option>
-                <option value="Horror">Horror</option>
                 <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Romance">Romance</option>
-                <option value="Thriller">Thriller</option>
+                <option value="Horror">Horror</option>
                 <option value="Documentary">Documentary</option>
                 <option value="Animation">Animation</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
+            <div>
+              <label className="block text-sm font-medium mb-1">Year</label>
+              <input
+                type="number"
+                name="year"
+                value={formData.year}
                 onChange={handleInputChange}
-                rows={3}
+                className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="1900"
+                max={new Date().getFullYear()}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Duration</label>
+              <input
+                type="text"
+                name="duration"
+                value={formData.duration}
+                onChange={handleInputChange}
+                placeholder="e.g., 1h 35m"
                 className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
           
-          <div className="text-right">
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-6 py-2 transition"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin mr-2"></div>
-                  Adding...
-                </span>
-              ) : (
-                'Add Movie'
-              )}
-            </button>
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={4}
+              className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
           </div>
+          
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition duration-200"
+            disabled={loading}
+          >
+            {loading ? 'Adding...' : 'Add Movie'}
+          </button>
         </form>
       </div>
       
-      {/* Movies list */}
-      <div>
-        <h2 className="text-xl font-medium mb-4">Movie Library</h2>
+      {/* Movie list */}
+      <div className="bg-gray-900 p-4 rounded-lg">
+        <h2 className="text-xl font-medium mb-4">Manage Movies</h2>
         
-        {loading && movies.length === 0 ? (
-          <div className="flex justify-center p-8">
-            <div className="w-10 h-10 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
-          </div>
-        ) : movies.length === 0 ? (
-          <div className="bg-gray-800 p-8 rounded-lg text-center">
-            <p className="text-gray-400">No movies added yet.</p>
+        {loading ? (
+          <div className="text-center py-8">Loading...</div>
+        ) : movies.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {movies.map(movie => (
+              <div key={movie.id} className="bg-gray-800 rounded-lg overflow-hidden">
+                <div className="relative aspect-video">
+                  <img
+                    src={movie.thumbnail || getArchiveThumbnailUrl(movie.archiveId)}
+                    alt={movie.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-3">
+                  <h3 className="font-medium truncate">{movie.title}</h3>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-sm text-gray-400">ID: {movie.archiveId}</span>
+                    <button
+                      onClick={() => handleDeleteMovie(movie.id)}
+                      className="text-red-500 hover:text-red-400 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
-          <div className="bg-gray-900 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-800 text-left">
-                  <tr>
-                    <th className="px-4 py-3">Title</th>
-                    <th className="px-4 py-3">Archive ID</th>
-                    <th className="px-4 py-3">Genre</th>
-                    <th className="px-4 py-3">Year</th>
-                    <th className="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {movies.map(movie => (
-                    <tr key={movie.id} className="hover:bg-gray-800/50">
-                      <td className="px-4 py-3">
-                        <div className="flex items-center">
-                          {movie.thumbnail && (
-                            <img 
-                              src={movie.thumbnail} 
-                              alt={movie.title} 
-                              className="w-10 h-10 object-cover rounded mr-3"
-                            />
-                          )}
-                          <span>{movie.title}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <code className="bg-gray-800 px-2 py-1 rounded text-xs">
-                          {movie.archiveId}
-                        </code>
-                      </td>
-                      <td className="px-4 py-3">{movie.genre || '-'}</td>
-                      <td className="px-4 py-3">{movie.year || '-'}</td>
-                      <td className="px-4 py-3">
-                        <button
-                          onClick={() => handleDeleteMovie(movie.id)}
-                          className="text-red-400 hover:text-red-300"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="text-center py-8 text-gray-400">
+            No movies found. Add some movies to get started.
           </div>
         )}
       </div>
