@@ -14,7 +14,7 @@ const httpServer = createServer(app);
 // Configure CORS for socket.io
 const io = new Server(httpServer, {
   cors: {
-    origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'https://movie-meet-1a81b.web.app'],
+    origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:3000', 'https://movie-meet-1a81b.web.app'],
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -27,7 +27,7 @@ const io = new Server(httpServer, {
 
 // Configure Express with enhanced CORS handling
 app.use(cors({
-  origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'https://movie-meet-1a81b.web.app'],
+  origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:3000', 'https://movie-meet-1a81b.web.app'],
   methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'Expires']
@@ -35,7 +35,14 @@ app.use(cors({
 
 // Additional CORS handling for preflight requests
 app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'https://movie-meet-1a81b.web.app');
+  const origin = req.headers.origin;
+  // Check if the request origin is one of our allowed origins
+  if (origin === 'http://localhost:3000' || origin === 'http://localhost:5173' || 
+      origin === 'https://movie-meet-1a81b.web.app' || origin === process.env.CLIENT_URL) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL || 'http://localhost:5173');
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cache-Control, Pragma, Expires');
   res.header('Access-Control-Allow-Credentials', 'true');

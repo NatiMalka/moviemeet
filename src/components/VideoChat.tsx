@@ -104,7 +104,7 @@ function CustomVideoGrid() {
 }
 
 // Custom controls that use the proper LiveKit hooks
-function CustomControls() {
+function CustomControls({ onToggleSize, isLarge }: { onToggleSize: () => void, isLarge: boolean }) {
   const { localParticipant } = useLocalParticipant();
   const participants = useParticipants();
   
@@ -169,7 +169,7 @@ function CustomControls() {
           </svg>
           {participants.length}
         </div>
-      
+        
         <button 
           onClick={toggleScreenShare}
           className={`p-2 ${isScreenShareEnabled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-800 hover:bg-gray-700'} rounded-full text-white transition-colors`}
@@ -181,6 +181,23 @@ function CustomControls() {
             <path d="M12 17v4"></path>
             <path d="M22 3l-5 5"></path>
             <path d="M17 3h5v5"></path>
+          </svg>
+        </button>
+        
+        {/* Resize button */}
+        <button 
+          onClick={onToggleSize}
+          className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full text-white transition-colors"
+          title={isLarge ? "Shrink camera window" : "Expand camera window"}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            {isLarge ? (
+              // Minimize icon
+              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+            ) : (
+              // Maximize icon
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+            )}
           </svg>
         </button>
       </div>
@@ -204,6 +221,7 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
     audioEnabled: true
   });
   const [step, setStep] = useState<'select' | 'configure' | 'chat'>('select');
+  const [isLargeSize, setIsLargeSize] = useState(false);
   const { roomId, username } = useSocket();
   
   // Using LiveKit's demo server for testing
@@ -266,6 +284,10 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
       handleJoin(username);
     }
   }, [username, roomId, isConnected, isLoading, isConfiguring]);
+
+  const toggleSize = () => {
+    setIsLargeSize(!isLargeSize);
+  };
 
   if (error) {
     return (
@@ -422,39 +444,57 @@ export function VideoChat({ token: providedToken, movieTitle }: VideoChatProps) 
       {/* Add custom styles to override LiveKit's built-in controls */}
       <style>{customStyles}</style>
       
-      <LiveKitRoom
-        token={token || undefined}
-        serverUrl={serverUrl}
-        connect={true}
-        className="h-full relative"
-        audio={mediaSettings.audioEnabled}
-        video={mediaSettings.videoEnabled}
-        data-lk-theme="default"
-        onDisconnected={() => {
-          setIsConnected(false);
-          setStep('select');
-        }}
-        onError={(error) => {
-          console.error("LiveKit connection error:", error);
-          setError(`Failed to connect: ${error.message}`);
-          setIsConnected(false);
-          setStep('select');
-        }}
-      >
-        {/* For compact integrated view, only show minimal UI */}
-        <div className="h-full flex flex-col">
-          <div className="flex-1 overflow-hidden">
-            <CustomVideoGrid />
-          </div>
+      {/* Fixed position video chat when in large mode */}
+      <div className={isLargeSize ? "fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" : ""}>
+        <div className={isLargeSize ? "w-full max-w-5xl h-[85vh] bg-gray-900 rounded-lg overflow-hidden shadow-2xl relative" : "h-full relative"}>
+          {isLargeSize && (
+            <div className="absolute top-0 right-0 p-2 z-20">
+              <button 
+                onClick={toggleSize}
+                className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          )}
+          
+          <LiveKitRoom
+            token={token || undefined}
+            serverUrl={serverUrl}
+            connect={true}
+            className="h-full relative"
+            audio={mediaSettings.audioEnabled}
+            video={mediaSettings.videoEnabled}
+            data-lk-theme="default"
+            onDisconnected={() => {
+              setIsConnected(false);
+              setStep('select');
+            }}
+            onError={(error) => {
+              console.error("LiveKit connection error:", error);
+              setError(`Failed to connect: ${error.message}`);
+              setIsConnected(false);
+              setStep('select');
+            }}
+          >
+            {/* For compact integrated view, only show minimal UI */}
+            <div className="h-full flex flex-col">
+              <div className="flex-1 overflow-hidden">
+                <CustomVideoGrid />
+              </div>
+            </div>
+            
+            {/* Compact controls at the bottom */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-sm py-1 z-20">
+              <CustomControls onToggleSize={toggleSize} isLarge={isLargeSize} />
+            </div>
+            
+            <RoomAudioRenderer />
+          </LiveKitRoom>
         </div>
-        
-        {/* Compact controls at the bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-sm py-1 z-20">
-          <CustomControls />
-        </div>
-        
-        <RoomAudioRenderer />
-      </LiveKitRoom>
+      </div>
     </>
   );
 }
