@@ -14,4 +14,13 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  server: {
+    port: 3000,
+  },
+  build: {
+    outDir: 'dist',
+  },
+  define: {
+    'process.env.APP_NAME': JSON.stringify('MovieMeet'),
+  }
 });
