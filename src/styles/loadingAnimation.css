@@ -1,0 +1,87 @@
+/* Import Netflix's font */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  z-index: 9999;
+  user-select: none;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+.loading-container.fade-out {
+  opacity: 0;
+}
+
+.logo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 40px;
+}
+
+/* Netflix-style text */
+.netflix-text {
+  color: #e50914;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  letter-spacing: 6px;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  position: relative;
+  margin: 0;
+  padding: 0;
+  animation: textPulse 1s ease-in-out;
+  font-weight: bold;
+}
+
+@keyframes textPulse {
+  0% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Shine animation overlay */
+.shine-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 100%
+  );
+  z-index: 1;
+  animation: shine 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes shine {
+  0% {
+    left: -200%;
+  }
+  100% {
+    left: 100%;
+  }
+} 

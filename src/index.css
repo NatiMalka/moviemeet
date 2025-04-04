@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* LiveKit styles */
+:root {
+  --lk-control-bar-height: 80px;
+}
+
+.lk-video-conference {
+  background: transparent !important;
+}
+
+.lk-participant-tile {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.lk-control-bar {
+  background: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px);
+}
+
+.lk-prejoin {
+  background: transparent !important;
+}
+
+.lk-prejoin-container {
+  background: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
