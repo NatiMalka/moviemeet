@@ -14,6 +14,7 @@ interface Movie {
   archiveId?: string;
   megaLink?: string;
   cloudinaryId?: string;
+  externalUrl?: string;
   genre: string;
   year: number;
   duration: string;
@@ -135,6 +136,51 @@ export function HomePage() {
               <p className="text-gray-400">
                 Access a growing collection of movies to watch with your friends anytime.
               </p>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <Film className="h-8 w-8 text-blue-500 mb-3" />
+              <h3 className="text-lg font-semibold mb-2">Watch Together</h3>
+              <p className="text-gray-300">
+                Enjoy synchronized video playback with friends in private rooms.
+              </p>
+            </div>
+            
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <Users className="h-8 w-8 text-blue-500 mb-3" />
+              <h3 className="text-lg font-semibold mb-2">Live Chat</h3>
+              <p className="text-gray-300">
+                Chat in real-time while watching your favorite content together.
+              </p>
+            </div>
+            
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <Calendar className="h-8 w-8 text-blue-500 mb-3" />
+              <h3 className="text-lg font-semibold mb-2">Schedule Showings</h3>
+              <p className="text-gray-300">
+                Plan movie nights with an easy-to-use scheduling system.
+              </p>
+            </div>
+
+            {/* New Feature Highlight */}
+            <div className="bg-blue-900/30 border border-blue-700/50 p-6 rounded-lg col-span-1 md:col-span-3 mt-2">
+              <div className="flex items-start">
+                <div className="bg-blue-600 rounded-full p-2 mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-1 text-blue-300">NEW: External Content Integration</h3>
+                  <p className="text-gray-300">
+                    You can now watch content from external sites like AnimeiL-TV directly in MovieMeet! 
+                    Simply add an external URL when creating a movie room.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

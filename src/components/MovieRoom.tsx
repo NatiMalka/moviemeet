@@ -6,6 +6,7 @@ import { MovieLibrary } from './MovieLibrary';
 import { MegaPlayer } from './MegaPlayer';
 import { Chat } from './Chat';
 import { ArchivePlayer } from './ArchivePlayer';
+import { ExternalPlayer } from './ExternalPlayer';
 
 interface Movie {
   id: string;
@@ -15,6 +16,7 @@ interface Movie {
   megaLink?: string;
   archiveId?: string;
   cloudinaryId?: string;
+  externalUrl?: string;
   genre: string;
   year: number;
   duration: string;
@@ -282,20 +284,29 @@ export function MovieRoom({ roomId, userId, username }: MovieRoomProps) {
                 <div className="flex-grow flex flex-col min-h-0">
                   <div className="bg-gray-900 rounded-lg overflow-hidden mb-4 flex-grow flex flex-col">
                     <div className="aspect-video w-full">
-                      {currentMovie.archiveId ? (
-                        // Use ArchivePlayer for Archive.org videos
-                        <ArchivePlayer 
-                          archiveId={currentMovie.archiveId} 
-                          className="w-full h-full" 
-                        />
-                      ) : (
-                        // Use MegaPlayer for Mega.nz or Cloudinary videos
-                        <MegaPlayer 
-                          megaLink={currentMovie.megaLink || ''}
-                          cloudinaryId={currentMovie.cloudinaryId} 
-                          className="w-full h-full" 
-                        />
-                      )}
+                      <div className="flex-1 bg-black rounded-lg overflow-hidden">
+                        {currentMovie?.externalUrl ? (
+                          <ExternalPlayer 
+                            externalUrl={currentMovie.externalUrl} 
+                            className="w-full h-full"
+                          />
+                        ) : currentMovie?.megaLink ? (
+                          <MegaPlayer 
+                            megaLink={currentMovie.megaLink} 
+                            cloudinaryId={currentMovie.cloudinaryId} 
+                            className="w-full h-full"
+                          />
+                        ) : currentMovie?.archiveId ? (
+                          <ArchivePlayer 
+                            archiveId={currentMovie.archiveId} 
+                            className="w-full h-full" 
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <p className="text-gray-400">No video source available</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="p-4 border-t border-gray-800">

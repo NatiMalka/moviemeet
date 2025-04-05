@@ -1,0 +1,273 @@
+/* ExternalPlayer.css - Styles for embedded website player */
+
+.external-player {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.external-player.embedded-website {
+  aspect-ratio: 16 / 9;
+  height: calc(100vh - 200px);
+  max-height: 800px;
+}
+
+.iframe-container {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+/* Dark mode styles for the iframe */
+.iframe-container iframe.dark-mode-iframe {
+  background-color: #121212;
+}
+
+/* Loading indicator */
+.external-player .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+/* Controls wrapper */
+.external-player .controls-wrapper {
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.external-player:hover .controls-wrapper {
+  opacity: 1;
+}
+
+.external-player:not(:hover) .controls-wrapper {
+  opacity: 0.3;
+}
+
+/* Full screen mode */
+.external-player.fullscreen-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  max-height: none;
+}
+
+.external-player.fullscreen-mode .iframe-container {
+  height: 100%;
+}
+
+/* Optimize embedded view for different screen sizes */
+@media (max-width: 768px) {
+  .external-player.embedded-website {
+    height: calc(100vh - 120px);
+    max-height: 600px;
+  }
+  
+  .external-player .controls-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .external-player button {
+    padding: 0.25rem !important;
+  }
+  
+  .external-player .controls-wrapper .flex.gap-2 {
+    gap: 0.25rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .external-player.embedded-website {
+    height: calc(100vh - 80px);
+    aspect-ratio: auto;
+  }
+  
+  .external-player .controls-wrapper {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .external-player .controls-wrapper > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Fix for AnimeiL-TV embedded site */
+.external-player[data-site="animeil-tv"] iframe {
+  overflow-x: hidden;
+}
+
+/* Hide unwanted elements in embedded websites through iframe styles */
+.iframe-container iframe.optimized-embed {
+  display: block;
+}
+
+/* Video player styles */
+.external-player video {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+/* Container styles */
+.external-player {
+  position: relative;
+  overflow: hidden;
+  background-color: #000;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  height: 100%;
+  width: 100%;
+}
+
+/* Fullscreen mode */
+.external-player.fullscreen-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  border-radius: 0;
+}
+
+/* Iframe container */
+.iframe-container {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+}
+
+/* Hide scrollbars but allow scrolling */
+.iframe-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.iframe-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.iframe-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.iframe-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Controls styles */
+.controls-wrapper {
+  transition: opacity 0.3s ease;
+}
+
+.external-player:hover .controls-wrapper {
+  opacity: 1;
+}
+
+.external-player:not(:hover) .controls-wrapper {
+  opacity: 0.3;
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styling for iframe to fit better in the container */
+.external-player iframe {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+  transform-origin: top left;
+}
+
+/* Better touch handling for mobile */
+@media (max-width: 768px) {
+  .controls-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .controls-wrapper button, 
+  .controls-wrapper .flex button {
+    padding: 0.3rem;
+  }
+  
+  .controls-wrapper .flex {
+    gap: 0.25rem;
+  }
+}
+
+/* Dark theme adjustment for iframe content */
+.dark-mode-iframe {
+  filter: invert(90%) hue-rotate(180deg);
+}
+
+/* Media query for better embedding on smaller screens */
+@media (max-width: 640px) {
+  .iframe-container {
+    height: 80vh;
+  }
+}
+
+/* Additional control for when the player is inside a movie room */
+.movie-room .external-player {
+  height: 80vh;
+}
+
+/* Fixing possible conflicts with AnimeiL-TV CSS */
+.external-player iframe {
+  max-width: 100%;
+  max-height: 100%;
+} 

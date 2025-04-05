@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './styles/ExternalPlayer.css';
 
 /* LiveKit styles */
 :root {
@@ -29,4 +30,43 @@
   backdrop-filter: blur(10px);
   border-radius: 0.5rem;
   padding: 2rem;
+}
+
+/* Your other global styles */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Fix for iframe embedding to ensure proper sizing and scrolling */
+.external-player-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Additional styles to enhance embedded website viewing */
+.external-player.embedded-website {
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 200px);
+}
+
+@media (max-width: 768px) {
+  .external-player.embedded-website {
+    aspect-ratio: auto;
+    height: 80vh;
+  }
 }

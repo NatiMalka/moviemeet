@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { ArchivePlayer } from './ArchivePlayer';
+import { MegaPlayer } from './MegaPlayer';
+import { ExternalPlayer } from './ExternalPlayer';
 
 interface Movie {
   id: string;
@@ -11,6 +13,7 @@ interface Movie {
   archiveId?: string;
   megaLink?: string;
   cloudinaryId?: string;
+  externalUrl?: string;
   genre: string;
   year: number;
   duration: string;
@@ -120,10 +123,27 @@ export function MovieLibrary({ roomId, onSelectMovie }: MovieLibraryProps) {
       {selectedMovie && (
         <div className="mb-8">
           <div className="rounded-lg overflow-hidden bg-gray-900">
-            <ArchivePlayer 
-              archiveId={selectedMovie.archiveId || ''} 
-              className="aspect-video w-full" 
-            />
+            {selectedMovie.externalUrl ? (
+              <ExternalPlayer 
+                externalUrl={selectedMovie.externalUrl} 
+                className="aspect-video w-full" 
+              />
+            ) : selectedMovie.megaLink ? (
+              <MegaPlayer 
+                megaLink={selectedMovie.megaLink} 
+                cloudinaryId={selectedMovie.cloudinaryId} 
+                className="aspect-video w-full" 
+              />
+            ) : selectedMovie.archiveId ? (
+              <ArchivePlayer 
+                archiveId={selectedMovie.archiveId || ''} 
+                className="aspect-video w-full" 
+              />
+            ) : (
+              <div className="flex items-center justify-center aspect-video w-full">
+                <p className="text-gray-400">No video source available</p>
+              </div>
+            )}
           </div>
           
           <div className="mt-4">

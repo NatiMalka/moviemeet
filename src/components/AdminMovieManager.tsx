@@ -12,6 +12,7 @@ interface MovieFormData {
   genre: string;
   year: number;
   duration: string;
+  externalUrl?: string;
 }
 
 interface Movie {
@@ -23,6 +24,7 @@ interface Movie {
   genre: string;
   year: number;
   duration: string;
+  externalUrl?: string;
   addedOn: any;
 }
 
@@ -43,7 +45,8 @@ export function AdminMovieManager() {
     archiveId: '',
     genre: '',
     year: new Date().getFullYear(),
-    duration: ''
+    duration: '',
+    externalUrl: ''
   });
 
   // Fetch existing movies
@@ -125,7 +128,8 @@ export function AdminMovieManager() {
         archiveId: '',
         genre: '',
         year: new Date().getFullYear(),
-        duration: ''
+        duration: '',
+        externalUrl: ''
       });
       
       setSuccess('Movie added successfully!');
@@ -377,6 +381,24 @@ export function AdminMovieManager() {
                 placeholder="e.g., 1h 35m"
                 className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+            </div>
+            
+            {/* External URL (AnimeiL-TV) */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
+                External URL (AnimeiL-TV)
+              </label>
+              <input
+                type="text"
+                name="externalUrl"
+                value={formData.externalUrl || ''}
+                onChange={handleInputChange}
+                className="w-full bg-gray-800 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter URL from AnimeiL-TV"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Optional. Enter a URL from AnimeiL-TV to embed external content.
+              </p>
             </div>
           </div>
           
